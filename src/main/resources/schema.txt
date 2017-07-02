@@ -1,0 +1,52 @@
+ /*DROP TABLE IF EXISTS restaurants;*/
+ /* SCRIPT DO BANCO*/
+/*
+
+CREATE TABLE public.restaurants (
+                id VARCHAR NOT NULL,
+                name VARCHAR,
+                category VARCHAR,
+                deliveryEstimate VARCHAR,
+                rating DOUBLE PRECISION,
+                about VARCHAR,
+                imagePath VARCHAR,
+                hours VARCHAR,
+                CONSTRAINT id PRIMARY KEY (id)
+);
+
+
+CREATE TABLE public.reviews (
+                id_review INTEGER NOT NULL,
+                name VARCHAR,
+                date DATE,
+                rating DOUBLE PRECISION,
+                comments VARCHAR,
+                restaurantId VARCHAR NOT NULL,
+                CONSTRAINT reviews_pk PRIMARY KEY (id_review)
+);
+
+
+CREATE TABLE public.menu (
+                id VARCHAR NOT NULL,
+                imagePath VARCHAR,
+                name VARCHAR,
+                description VARCHAR,
+                price DOUBLE PRECISION,
+                restaurantId VARCHAR NOT NULL,
+                CONSTRAINT id_menu PRIMARY KEY (id)
+);
+
+
+ALTER TABLE public.menu ADD CONSTRAINT restaurants_menu_fk
+FOREIGN KEY (restaurantId)
+REFERENCES public.restaurants (id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT DEFERRABLE;
+
+ALTER TABLE public.reviews ADD CONSTRAINT restaurants_reviews_fk
+FOREIGN KEY (restaurantId)
+REFERENCES public.restaurants (id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+NOT DEFERRABLE;*/

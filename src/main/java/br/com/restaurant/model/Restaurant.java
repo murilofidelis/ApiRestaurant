@@ -3,7 +3,6 @@ package br.com.restaurant.model;
 public class Restaurant {
 
 	private String id;
-
 	private String name;
 	private String category;
 	private String deliveryEstimate;

@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.restaurant.model.Menu;
 import br.com.restaurant.model.Restaurant;
+import br.com.restaurant.model.Review;
 import br.com.restaurant.service.MenuService;
 import br.com.restaurant.service.RestaurantService;
+import br.com.restaurant.service.ReviewService;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -25,6 +27,8 @@ public class RestaurantController {
 	RestaurantService restaurantService;
 	@Autowired
 	MenuService menuService;
+	@Autowired
+	ReviewService reviewService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Restaurant>> listRestaurants() {
@@ -57,6 +61,18 @@ public class RestaurantController {
 	public ResponseEntity<Menu> saveMenu(@RequestBody Menu menu) {
 		menuService.save(menu);
 		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/reviews", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Menu> saveReview(@RequestBody Review review) {
+		reviewService.save(review);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/reviews", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Review>> listReviews(@PathVariable String id) {
+		List<Review> list = reviewService.list(id);
+		return new ResponseEntity<List<Review>>(list, HttpStatus.OK);
 	}
 
 }

@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.restaurant.model.Menu;
 import br.com.restaurant.model.Restaurant;
+import br.com.restaurant.service.MenuService;
 import br.com.restaurant.service.RestaurantService;
 
 @RestController
@@ -20,17 +22,19 @@ import br.com.restaurant.service.RestaurantService;
 public class RestaurantController {
 
 	@Autowired
-	RestaurantService service;
+	RestaurantService restaurantService;
+	@Autowired
+	MenuService menuService;
 
 	@RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<Restaurant>> getAll() {
-		List<Restaurant> listResult = service.list();
+	public ResponseEntity<List<Restaurant>> listRestaurants() {
+		List<Restaurant> listResult = restaurantService.list();
 		return new ResponseEntity<List<Restaurant>>(listResult, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Restaurant> getRestaurantById(@PathVariable String id) {
-		Restaurant restaurant = service.getRestaurant(id);
+		Restaurant restaurant = restaurantService.getRestaurant(id);
 		if (restaurant == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
@@ -38,8 +42,21 @@ public class RestaurantController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Restaurant> save(@RequestBody Restaurant restaurant) {
-		service.save(restaurant);
+	public ResponseEntity<Restaurant> saveRestaurant(@RequestBody Restaurant restaurant) {
+		restaurantService.save(restaurant);
 		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/menu", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<Menu>> listMenus(@PathVariable String id) {
+		List<Menu> list = menuService.list(id);
+		return new ResponseEntity<List<Menu>>(list, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/menu", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Menu> saveMenu(@RequestBody Menu menu) {
+		menuService.save(menu);
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+
 }

@@ -36,6 +36,22 @@ CREATE TABLE public.menu (
                 CONSTRAINT id_menu PRIMARY KEY (id)
 );
 
+CREATE TABLE public.orders (
+                id INTEGER NOT NULL,
+                endereco VARCHAR,
+                numero INTEGER NOT NULL,
+                complemento VARCHAR,
+                opcaoPagamentoSelecionada VARCHAR,
+                CONSTRAINT id_orders PRIMARY KEY (id)
+);
+
+CREATE TABLE public.orderItems (
+                id INTEGER NOT NULL,
+                menuId VARCHAR NOT NULL,
+                qunatity INTEGER,
+                CONSTRAINT menuid PRIMARY KEY (id, menuId)
+);
+
 
 ALTER TABLE public.menu ADD CONSTRAINT restaurants_menu_fk
 FOREIGN KEY (restaurantId)
@@ -49,4 +65,21 @@ FOREIGN KEY (restaurantId)
 REFERENCES public.restaurants (id)
 ON DELETE CASCADE
 ON UPDATE CASCADE
-NOT DEFERRABLE;*/
+NOT DEFERRABLE;
+
+ALTER TABLE public.orderItems ADD CONSTRAINT orders_orderitems_fk
+FOREIGN KEY (id)
+REFERENCES public.orders (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE public.orderItems ADD CONSTRAINT menu_orderitems_fk
+FOREIGN KEY (menuId)
+REFERENCES public.menu (id)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+
+*/

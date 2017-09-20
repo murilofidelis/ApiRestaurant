@@ -74,5 +74,4 @@ public class RestaurantController {
 		List<Review> list = reviewService.list(id);
 		return new ResponseEntity<List<Review>>(list, HttpStatus.OK);
 	}
-
 }

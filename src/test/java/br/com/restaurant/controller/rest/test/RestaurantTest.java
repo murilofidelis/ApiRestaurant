@@ -16,6 +16,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -32,6 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.io.IOException;
+import java.util.Collections;
+
+import javax.inject.Inject;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApiRestauranteApplication.class, webEnvironment = RANDOM_PORT)
@@ -58,8 +62,10 @@ public class RestaurantTest {
 		JacksonTester.initFields(this, objectMapper);
 	}
 	@Test
-	public void save() throws RestClientException, IOException {
+	public void save()  {
+		
 		Restaurant restaurant = new Restaurant();
+		restaurant.setId("Teste2265");
 		restaurant.setName("Meu Restaurante");
 		restaurant.setCategory("bread-bakery");
 		restaurant.setHours("24");
@@ -68,10 +74,14 @@ public class RestaurantTest {
 		restaurant.setAbout("n/a");
 		restaurant.setImagePath("imagem");
 		
+	    
+	    ResponseEntity<Restaurant> response = this.restTemplate.postForEntity("http://localhost:8080/ApiRestaurant/restaurants", restaurant, Restaurant.class,Collections.EMPTY_MAP);
+	    assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);		
+
 		//ResponseEntity<Restaurant> 	r = restTemplate.postForEntity("http://localhost:8080/ApiRestaurant/restaurants/", this.json.write(restaurant), Restaurant.class);
 		
 		
-		final ResponseEntity<Restaurant> salvar = this.restTemplate.postForEntity("http://localhost:8080/ApiRestaurant/restaurants/", this.json.write(restaurant), Restaurant.class);
+		/*final ResponseEntity<Restaurant> salvar = this.restTemplate.postForEntity("http://localhost:8080/ApiRestaurant/restaurants", this.json.write(restaurant), Restaurant.class);
 		assertThat(salvar.getStatusCode()).isEqualTo(HttpStatus.CREATED);		
 		
 		
@@ -85,11 +95,11 @@ public class RestaurantTest {
 	        assertThat(dto).isNotNull();
 		
 			*/
+
 		
 	}
 
 	@Test
-	@Ignore
 	public void getRestaurantById() throws Exception {
 
 		final ResponseEntity<String> rest = this.restTemplate
@@ -106,7 +116,6 @@ public class RestaurantTest {
 	}
 
 	@Test
-	@Ignore
 	public void validarHeader() {
 		HttpHeaders h = this.restTemplate.getForEntity("http://localhost:8080/ApiRestaurant/restaurants/", String.class)
 				.getHeaders();
